@@ -3,7 +3,7 @@ import SearchBar from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-
+import css from './App.module.css';
 export class App extends Component {
   state = {
     data: [],
@@ -65,7 +65,7 @@ export class App extends Component {
     const shouldRenderLoadMoreButton = data.length > 0 && !isLoading;
 
     return (
-      <div>
+      <div className={css.App}>
         {error && <h1>Error!</h1>}
 
         <SearchBar onSubmit={this.onChangeQuery} />
