@@ -11,6 +11,7 @@ export class App extends Component {
     searchData: '',
     isLoading: false,
     error: null,
+    total: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -18,7 +19,6 @@ export class App extends Component {
       prevState.currentPage !== this.state.currentPage ||
       prevState.searchData !== this.state.searchData
     ) {
-      console.log(this.state.currentPage);
       this.fetchData();
     } else {
     }
@@ -30,6 +30,7 @@ export class App extends Component {
       currentPage: 1,
       data: [],
       error: null,
+      total: 0,
     });
   };
 
@@ -50,6 +51,7 @@ export class App extends Component {
       .then(data => {
         this.setState(prevState => ({
           data: [...prevState.data, ...data.hits],
+          total: data.totalHits,
         }));
       })
       .finally(() => this.setState({ isLoading: false }));
@@ -61,9 +63,8 @@ export class App extends Component {
     }));
   };
   render() {
-    const { data, isLoading, error } = this.state;
-    const shouldRenderLoadMoreButton = data.length > 0 && !isLoading;
-
+    const { total, isLoading, error } = this.state;
+    const shouldRenderLoadMoreButton = total > 12 && !isLoading;
     return (
       <div className={css.App}>
         {error && <h1>Error!</h1>}
@@ -71,7 +72,6 @@ export class App extends Component {
         <SearchBar onSubmit={this.onChangeQuery} />
         <ImageGallery images={this.state.data} />
         {isLoading && <Loader />}
-
         {shouldRenderLoadMoreButton && <Button loadMore={this.loadMore} />}
       </div>
     );
